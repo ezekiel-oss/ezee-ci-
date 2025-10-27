@@ -21,10 +21,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Ensure template is extracted (one-time)
+      - name: Ensure template is extracted or integrated (one-time)
         run: |
-          if [ ! -f package.json ] && [ -f scripts/extract_template.py ] && [ -f template-c1-next.zip ]; then
-            python3 scripts/extract_template.py --promote-to-root
+          if [ ! -f package.json ]; then
+            if [ -f scripts/extract_template.py ] && [ -f template-c1-next.zip ]; then
+              python3 scripts/extract_template.py --promote-to-root
+            fi
+            if [ ! -f package.json ] && [ -f scripts/integrate_thesys_component_next.py ]; then
+              python3 scripts/integrate_thesys_component_next.py --promote-to-root
+            fi
           fi
 
       - name: Setup Node.js

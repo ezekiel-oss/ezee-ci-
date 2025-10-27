@@ -2,7 +2,7 @@
 
 # Thesys AI — Repo Setup and Deployment
 
-This repo contains your template zip (`template-c1-next.zip`). I’ve added a helper script and project hygiene to quickly arrange the template so the app lives at the repo root, which is the best option for CI/CD and deployment.
+This repo contains your template zip (`template-c1-next.zip`). I’ve added helper scripts and project hygiene to quickly arrange the template so the app lives at the repo root, which is the best option for CI/CD and deployment.
 
 ## Quick Start (promote to repo root)
 
@@ -20,6 +20,18 @@ This repo contains your template zip (`template-c1-next.zip`). I’ve added a he
    - Production build: `npm run build`
    - Start: `npm start` (or deploy via Vercel or your chosen platform)
 
+## Integrate with thesysdev/template-c1-component-next
+
+If you want to base your app on the official Thesys C1 component template, use the integration script:
+
+- Run: `python3 scripts/integrate_thesys_component_next.py --promote-to-root`
+  - Downloads the repo archive from GitHub.
+  - Extracts and moves its contents to the repo root.
+  - Backs up conflicting files (`README.repo.md`, `.gitignore.template`, `*.incoming`).
+- After integration:
+  - Set `THESYS_API_KEY` in your environment (or Vercel Project Settings → Environment Variables).
+  - `npm install && npm run dev` to run locally.
+
 ## Vercel Deployment
 
 You have two options:
@@ -27,7 +39,7 @@ You have two options:
 - Git integration (recommended):
   1) Push this repo to GitHub/GitLab/Bitbucket.
   2) In Vercel, “Add New Project” → import this repo.
-  3) Set environment variables in Project Settings → Environment Variables (use `.env.example` as a reference for keys).
+  3) Set environment variables in Project Settings → Environment Variables (use `.env.example` as a reference for keys; include `THESYS_API_KEY`).
   4) Vercel will auto-build and deploy on push.
 
 - CI-driven deploy with Vercel CLI:
