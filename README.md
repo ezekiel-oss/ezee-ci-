@@ -1,15 +1,18 @@
 # Thesys AI — Repo Setup and Deployment
 
-This repo contains your template zip (`template-c1-next.zip`). The best arrangement for deployment is to extract the template into a working application directory and run it as the root app or a clear sub-app. I’ve added a helper script and basic project hygiene so you can proceed quickly.
+This repo contains your template zip (`template-c1-next.zip`). I’ve added a helper script and project hygiene to quickly arrange the template so the app lives at the repo root, which is the best option for CI/CD and deployment.
 
-## Quick Start
+## Quick Start (promote to repo root)
 
-1) Extract the template into a folder named `thesys-ai`:
-   - Run: `python3 scripts/extract_template.py`
-   - This will produce: `./thesys-ai/` with the template contents properly flattened (it handles zips that contain a single top-level folder).
+1) Extract and promote to root:
+   - Run: `python3 scripts/extract_template.py --promote-to-root`
+   - The script flattens the zip contents. If the zip has a single top-level folder, its contents are moved up.
+   - Conflict handling:
+     - If a `README.md` already exists, it’s backed up to `README.repo.md` and the template’s README becomes the root README.
+     - If a `.gitignore` exists, the template’s one is saved as `.gitignore.template` and the current `.gitignore` is kept.
+     - Other file conflicts will be saved with `.incoming` suffix.
 
 2) Install and run (Next.js workflow assumed):
-   - `cd thesys-ai`
    - `npm install`
    - Development: `npm run dev`
    - Production build: `npm run build`
@@ -35,5 +38,4 @@ This repo contains your template zip (`template-c1-next.zip`). The best arrangem
 ## Notes
 
 - `.gitignore` is added to keep Node/Next.js build artifacts out of version control.
-- If you prefer the template as the repo root (not in `thesys-ai`), let me know and I’ll re-arrange the files after extraction.
 - If your template needs specific environment variables (e.g., for “Thesys AI”), add them in a `.env.local` for local dev and configure them in ezee-ci for builds.
