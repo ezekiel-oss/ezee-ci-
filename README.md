@@ -1,3 +1,5 @@
+[![Deploy Next.js site to Pages](https://github.com/ezekiel-oss/ezee-ci-/actions/workflows/nextjs.yml/badge.svg)](https://github.com/ezekiel-oss/ezee-ci-/actions/workflows/nextjs.yml)
+
 # Thesys AI — Repo Setup and Deployment
 
 This repo contains your template zip (`template-c1-next.zip`). I’ve added a helper script and project hygiene to quickly arrange the template so the app lives at the repo root, which is the best option for CI/CD and deployment.
@@ -34,10 +36,18 @@ You have two options:
   3) Run: `bash scripts/deploy_vercel.sh` in CI to build and deploy via CLI.
      - The script runs `vercel pull`, `vercel build`, and `vercel deploy --prebuilt`.
 
+## GitHub Pages Deployment (via Actions)
+
+- Workflow badge above points to the GitHub Actions workflow that builds and deploys to GitHub Pages.
+- The workflow will:
+  - Extract the template if not yet committed (uses `scripts/extract_template.py`),
+  - Install dependencies, build, and run `next export`,
+  - Upload the `out/` directory and deploy it to Pages.
+
 ## CI/CD (ezee-ci)
 
 - Typical pipeline steps:
-  - Install: `npm ci`
+  - Install: `npm ci` (or `npm install` if no lockfile)
   - Lint/tests: `npm run lint && npm test` (if present)
   - Build: `npm run build`
   - Deploy:
