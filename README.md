@@ -18,24 +18,33 @@ This repo contains your template zip (`template-c1-next.zip`). I’ve added a he
    - Production build: `npm run build`
    - Start: `npm start` (or deploy via Vercel or your chosen platform)
 
-3) CI/CD (ezee-ci)
-   - Typical pipeline steps:
-     - Install: `npm ci`
-     - Lint/tests: `npm run lint && npm test` (if present)
-     - Build: `npm run build`
-     - Deploy: either to Vercel (recommended for Next.js) or to your server/container.
-   - Ensure environment variables (e.g., API keys, secrets) are configured in ezee-ci before build/deploy.
+## Vercel Deployment
 
-## Deployment Options
+You have two options:
 
-- Vercel (recommended for Next.js):
-  - Connect the repo, set environment variables, and Vercel will build/deploy on push.
-- Custom server / container:
-  - Build in CI (`npm run build`) and deploy the `.next` output (with Node server), or containerize and roll out using your infra.
-- Static export (if the template supports it):
-  - `next build && next export` produces `out/` which can be deployed as static files.
+- Git integration (recommended):
+  1) Push this repo to GitHub/GitLab/Bitbucket.
+  2) In Vercel, “Add New Project” → import this repo.
+  3) Set environment variables in Project Settings → Environment Variables (use `.env.example` as a reference for keys).
+  4) Vercel will auto-build and deploy on push.
+
+- CI-driven deploy with Vercel CLI:
+  1) Ensure the repo is linked to a Vercel project.
+  2) Provide these CI env variables: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, and optionally `VERCEL_ENV` (`production` or `preview`).
+  3) Run: `bash scripts/deploy_vercel.sh` in CI to build and deploy via CLI.
+     - The script runs `vercel pull`, `vercel build`, and `vercel deploy --prebuilt`.
+
+## CI/CD (ezee-ci)
+
+- Typical pipeline steps:
+  - Install: `npm ci`
+  - Lint/tests: `npm run lint && npm test` (if present)
+  - Build: `npm run build`
+  - Deploy:
+    - Either rely on Vercel Git integration (no deploy step needed),
+    - Or call `bash scripts/deploy_vercel.sh` with the required Vercel env variables.
 
 ## Notes
 
 - `.gitignore` is added to keep Node/Next.js build artifacts out of version control.
-- If your template needs specific environment variables (e.g., for “Thesys AI”), add them in a `.env.local` for local dev and configure them in ezee-ci for builds.
+- Add non-secret defaults to `.env.example`; set actual secrets in Vercel Project Settings.
