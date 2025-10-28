@@ -29,7 +29,7 @@ If you want to base your app on the official Thesys C1 component template, use t
   - Extracts and moves its contents to the repo root.
   - Backs up conflicting files (`README.repo.md`, `.gitignore.template`, `*.incoming`).
 - After integration:
-  - Set `THESYS_API_KEY` in your environment (or Vercel Project Settings → Environment Variables).
+  - Set `THESYS_API_KEY` in your environment (or Vercel/Netlify Project Settings → Environment Variables).
   - `npm install && npm run dev` to run locally.
 
 ## Vercel Deployment
@@ -48,11 +48,31 @@ You have two options:
   3) Run: `bash scripts/deploy_vercel.sh` in CI to build and deploy via CLI.
      - The script runs `vercel pull`, `vercel build`, and `vercel deploy --prebuilt`.
 
+## Netlify Deployment
+
+Netlify is supported via `netlify.toml` and the official Next.js plugin.
+
+- Connect your repo to Netlify.
+- In Netlify → Site settings → Build & deploy:
+  - Build command: `npm run build` (Netlify uses the value in `netlify.toml`)
+  - Publish directory: `.next` (managed by the Next.js plugin)
+- In Netlify → Site settings → Environment variables:
+  - Add `THESYS_API_KEY` and any other secrets.
+- Ensure that your Next.js application files (package.json, etc.) are committed and pushed.
+  - If you haven’t yet, run the integration script locally and commit the generated files:
+    - `python3 scripts/integrate_thesys_component_next.py --promote-to-root`
+    - `npm install`
+    - Commit and push
+
+`netlify.toml` includes:
+- `[build] command = "npm run build"`
+- `[[plugins]] package = "@netlify/plugin-nextjs"`
+
 ## GitHub Pages Deployment (via Actions)
 
 - Workflow badge above points to the GitHub Actions workflow that builds and deploys to GitHub Pages.
 - The workflow will:
-  - Extract the template if not yet committed (uses `scripts/extract_template.py`),
+  - Extract the template if not yet committed (uses `scripts/extract_template.py` or integration script),
   - Install dependencies, build, and run `next export`,
   - Upload the `out/` directory and deploy it to Pages.
 
@@ -63,10 +83,10 @@ You have two options:
   - Lint/tests: `npm run lint && npm test` (if present)
   - Build: `npm run build`
   - Deploy:
-    - Either rely on Vercel Git integration (no deploy step needed),
-    - Or call `bash scripts/deploy_vercel.sh` with the required Vercel env variables.
+    - Either rely on platform Git integration (Vercel/Netlify),
+    - Or call your CI deploy scripts with required env variables.
 
 ## Notes
 
 - `.gitignore` is added to keep Node/Next.js build artifacts out of version control.
-- Add non-secret defaults to `.env.example`; set actual secrets in Vercel Project Settings.
+- Add non-secret defaults to `.env.example`; set actual secrets in Vercel/Netlify Project Settings.
