@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={fonts.map((font) => font.variable).join(" ")}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+      </head>
       <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   );
